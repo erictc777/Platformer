@@ -33,7 +33,7 @@ namespace Juego
         internal void DibujarBala(Graphics graphics)
         {
             graphics.DrawImage(im,
-                (int)(xb-40), (int)(yb-90),
+                (int)(xb), (int)(yb),
                 (int)(10), (int)(10));
         }
         public void DispararUp()
@@ -49,7 +49,7 @@ namespace Juego
         }
         public void DispararDrch()
         {
-            if (xb > this.ancho)
+            if (xb > this.ancho+531)
                 regresar = true;
             else
             {
@@ -73,13 +73,13 @@ namespace Juego
         }
         public Rectangle GetRectangle()
         {
-            return new Rectangle((int)(x - 40), (int)(y - 90),
+            return new Rectangle((int)(x), (int)(y),
                 (int)(50), (int)(50));
         }
         public void RegresarColision(Jugador p)
         {
-            xb = p.x-40;
-            yb = p.y-90;
+            xb = p.x;
+            yb = p.y;
         }
         public void CambiarDirxy(int diry, int dirx)
         {

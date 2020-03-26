@@ -63,6 +63,11 @@ namespace Juego
             return new Rectangle((int)(x - radio), (int)(y - radio),
                 (int)(25), (int)(25));
         }
+        public void Desaparecer()
+        {
+            x = 1000;
+            y = 1000;
+        }
 
     }
 }

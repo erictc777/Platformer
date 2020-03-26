@@ -20,7 +20,7 @@ namespace Juego
         public bool balaDrc = false;
         public bool balaIzq = false;
         public bool colision = true;
-        public Juego()
+        public Juego()     //Constructor del juego
         {
             InitializeComponent();
             p = new Jugador(pbCancha.Width, pbCancha.Height);
@@ -30,21 +30,21 @@ namespace Juego
             b = new Bala(pbCancha.Width, pbCancha.Height, p);
             pbCancha.BackgroundImage = Image.FromFile("..\\..\\img\\volcan.png");
             SoundPlayer player = new SoundPlayer("..\\..\\sound\\sonido.wav");
-            if (colision == false || p.estado == false)
+            if (colision == false || p.estado == false)         //Si el jugador se cae o colisiona deja de sonar la musica 
             {
-                player.Stop();
+               player.Stop();
             }
             else
             {
-                player.Play();
+              player.Play();
             }
         }
 
-        private void BotonSalir_Click(object sender, EventArgs e)
+        private void BotonSalir_Click(object sender, EventArgs e)           //Si el usuario presiona el boton salir, la aplicacion deja correr
         {
             Application.Exit();
         }
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)   //Comandos para el movimiento y el disparo
         {
             switch (keyData)
             {
@@ -84,7 +84,7 @@ namespace Juego
         }
         private void pbCancha_Paint(object sender, PaintEventArgs e)
         {
-            if (colision == true) //Mientras no se choque el juego seguira funcionando
+            if (colision == true || p.estado == false) //Mientras no se choque el juego seguira funcionando y mostrando en pantalla todos los objetos
             {
                 pl.Dibujarpiso(e.Graphics);
                 pl.Dibujarpisolava(e.Graphics);
@@ -100,10 +100,12 @@ namespace Juego
                     {
                         b.RegresarColision(p);            //Bala deja de moverse si choca con monstruo
                         p.PuntajeBala();              //Aumenta la puntuacion si golpea a un mosntruo
+                        m.borrar = false;               //Si la bala golpea a algun monstruo este desaparece
+                        m.borrar = true;
                     }
-                    else
+                    else    //Si la bala no colisiona con otro monstruo, se mantiene en movimiento
                     {
-                        b.CambiarDiry(15);
+                        b.CambiarDiry(25);
                         if (b.regresar == true)
                         {
                             b.RegresarColision(p);
@@ -111,7 +113,7 @@ namespace Juego
                         }
                        
                     }
-                    balaUp = false;
+                    //balaUp = false;
                 }
                 if (balaDrc == true) //Si apreta boton de disparo hacia la derecha recien dibuja la bala
                 {
@@ -121,10 +123,12 @@ namespace Juego
                         b.RegresarColision(p);          //Bala deja de moverse si choca con monstruo
 
                         p.PuntajeBala();                 //Aumenta la puntuacion si golpea a un mosntruo
+                        m.borrar = false;
+                        m.borrar = true;
                     }
-                    else
+                    else  //Si la bala no colisiona con otro monstruo, se mantiene en movimiento
                     {
-                        b.CambiarDirxy(15,-15);
+                        b.CambiarDirxy(25,-25);
                         if (b.regresar == true)
                         {
                             b.RegresarColision(p);
@@ -132,7 +136,7 @@ namespace Juego
                         }
                         
                     }
-                    balaDrc = false;
+                   // balaDrc = false;
                 }
                 if (balaIzq == true) //Si apreta boton de disparo hacia la izquierda recien dibuja la bala
                 {
@@ -141,34 +145,36 @@ namespace Juego
                     {
                         b.RegresarColision(p);    //Bala deja de moverse si choca con monstruo
                         p.PuntajeBala();         //Aumenta la puntuacion si golpea a un mosntruo
+                        m.borrar = false;
+                        m.borrar = true;
                     }
-                    else
+                    else //Si la bala no colisiona con otro monstruo, se mantiene en movimiento
                     {
-                        b.CambiarDirxy(15,15);
+                        b.CambiarDirxy(25,25);
                         if (b.regresar == true)
                         {
                             b.RegresarColision(p);
                             b.regresar = false;
                         }
                     }
-                    balaIzq = false;
+                   //balaIzq = false;
                 }
                 if (pl.VerificarColisionPlatJuga(p) == true)
                 {
-                    p.Puntaje();
+                    p.Puntaje();           //Si se choca con la plataforma aumenta 20 puntos a la puntuacion
                     p.Saltar();          //Si se choca con la plataforma salta
                 }
                 
                 if (m.VerificarColisionMonsJuga(p) == true)
                 {
                     colision = false;     //Si se choca con un monstruo deja de generar
-                    m.borrar = false;
+                          //Si colisiona   
                 }
             }
             if(colision==false)
             {
                 p.estado = false;
-                    puntos.Text = "Te chocaste " + "tu puntuacion fue:" + p.Getpuntos();
+                    puntos.Text = "Te chocaste " + "tu puntuacion fue:" + p.Getpuntos();  //Si el personaje se choca con un monstruo, termina el juego y se muestra la puntuacion obtenida
                 
                 pbCancha.Invalidate();
             }
@@ -177,32 +183,34 @@ namespace Juego
         }
         private void timer2_Tick_1(object sender, EventArgs e)
         {
-            if (p.GetRectangle().IntersectsWith(pl.GetRectangle()))
+            if (p.GetRectangle().IntersectsWith(pl.GetRectangle()))   //Si la plataforma y el jugador se tocan, el jugador salta
             {
                 p.Saltar();
             }
             pl.Mover();
-            pbCancha.Invalidate();
+           
             m.Mover();
             pbCancha.Invalidate();
             puntos.Text = "Puntuacion= " + p.Getpuntos();
             if (p.estado == false)
             {
-                puntos.Text = "Te caiste " + "tu puntuacion fue:" + p.Getpuntos();
+                puntos.Text = "Te caiste " + "tu puntuacion fue:" + p.Getpuntos();   //Si el jugador llega hasta el fondo de la pantalla, termina el juego y muestra el puntaje obtenido
             }
 
         }
         private void Timer1_Tick(object sender, EventArgs e)
         {
 
-            p.Caer();
-            
-            b.DispararDrch();
-            
-                b.DispararIzq();
-            
-                b.DispararUp();
+            p.Caer(); //El personaje siempre se mantiene cayendo
             pbCancha.Invalidate();
+
+            b.DispararUp();
+            b.DispararDrch();
+          
+            b.DispararIzq();
+            pbCancha.Invalidate();
+
+           
 
         }
 

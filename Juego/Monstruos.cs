@@ -53,6 +53,7 @@ namespace Juego
                 if (monstruos[i].GetRectangle().IntersectsWith(b.GetRectangle()))
                 {
                     respuesta = true;
+                    monstruos[i].Desaparecer();
                 }
             return respuesta;
         }

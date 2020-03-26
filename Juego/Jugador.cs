@@ -32,19 +32,21 @@ namespace Juego
         }
         public void Mover(int dx, int dy)
         {
-
-            if (x <= 75)
-                x = 75;
-            else x += dx;
-            y += dy;
-            if (x >= (500-75)) 
-                x = (500 - 100);
-            else x += dx;
-            y += dy;
-            if (x == xpt1 && y == ypt1)
+            if (estado == true)
             {
-                x = xpt1;
-                y = xpt1;
+                if (x <= 75)
+                    x = 75;
+                else x += dx;
+                y += dy;
+                if (x >= (500 - 75))
+                    x = (500 - 100);
+                else x += dx;
+                y += dy;
+                if (x == xpt1 && y == ypt1)
+                {
+                    x = xpt1;
+                    y = xpt1;
+                }
             }
         }
       
@@ -56,7 +58,7 @@ namespace Juego
         public void Caer()
         {
 
-            y += 90; ;
+            y += 50; 
             if (this.y > 700)
             {
                 estado = false;
@@ -68,8 +70,8 @@ namespace Juego
         internal void DibujarPersonaje(Graphics graphics)
         {
            graphics.DrawImage(i,
-                (int)(x-40), (int)(y-90),
-                (int)(50), (int)(50));
+                (int)(x-40), (int)(y-20),
+                (int)(45), (int)(45));
         }
         public void Puntaje()
         {
@@ -87,7 +89,7 @@ namespace Juego
         }
         public Rectangle GetRectangle()
         {
-            return new Rectangle((int)(x - 40), (int)(y - 90),
+            return new Rectangle((int)(x - 40), (int)(y - 10),
                 (int)(50), (int)(45));
         }
     }
